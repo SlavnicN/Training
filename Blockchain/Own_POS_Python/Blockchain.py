@@ -1,4 +1,5 @@
 from Block import Block
+from BlockchainUtils import BlockchainUtils
 
 class Blockchain:
 
@@ -16,3 +17,14 @@ class Blockchain:
 
         data['blocks'] = jsonData
         return data
+
+    def lastBlockCountValid(self, block):
+        if self.blocks[-1].blockCount == block.blockCount - 1:
+            return True
+        return False
+
+    def lastBlockHashValid(self,block):
+        latestBlockchainBlockHash = BlockchainUtils.hash(self.blocks[-1].payload()).hexdigest() 
+        if latestBlockchainBlockHash == block.lastHash:
+            return True
+        return False
