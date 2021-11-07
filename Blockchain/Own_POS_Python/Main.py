@@ -2,6 +2,7 @@ from Transaction import Transaction
 from Wallet import Wallet
 from TransactionPool import TransactionPool
 from Block import Block
+from Blockchain import Blockchain
 import pprint
 
 if __name__ == '__main__':
@@ -20,6 +21,8 @@ if __name__ == '__main__':
         pool.addTransaction(transaction)
 
     block = wallet.createBlock(pool.transactions, 'lastHash',1)
-    signatureValid = wallet.signatureValid(block.payload(), block.signature, fraudlentWallet.publicKeyString())
-    print(signatureValid)
     
+    blockchain = Blockchain()
+    blockchain.addBlock(block)
+
+    pprint.pprint(blockchain.toJson())
