@@ -10,6 +10,12 @@ class Block():
         self.timestamp = time.time()
         self.signature = ""
 
+    @staticmethod
+    def genesisBlock():
+        genesisBlock = Block([], 'genesisHash', 'genesis', 0)
+        genesisBlock.timestamp = 0
+        return genesisBlock 
+
     def toJson(self):
         data = {}
         data['lastHash'] = self.lastHash

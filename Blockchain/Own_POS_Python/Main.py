@@ -20,9 +20,9 @@ if __name__ == '__main__':
     if pool.transactionExists(transaction) == False:
         pool.addTransaction(transaction)
 
-    block = wallet.createBlock(pool.transactions, 'lastHash',1)
+   # block = wallet.createBlock(pool.transactions, 'lastHash',1)
     
     blockchain = Blockchain()
-    blockchain.addBlock(block)
+   # blockchain.addBlock(block)
 
     pprint.pprint(blockchain.toJson())
