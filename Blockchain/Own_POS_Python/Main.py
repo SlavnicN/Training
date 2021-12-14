@@ -8,37 +8,47 @@ from AccountModel import AccountModel
 import pprint
 
 if __name__ == '__main__':
-    
-    blockchain = Blockchain()
-    transactionPool = TransactionPool()
 
-    #Create Wallet with some funds
+    blockchain = Blockchain()
+    pool = TransactionPool()
+
     alice = Wallet()
     bob = Wallet()
     exchange = Wallet()
     forger = Wallet()
 
-    transactionExchange = exchange.createTransaction(alice.publicKeyString(), 10, "EXCHANGE")
-    if not transactionPool.transactionExists(transactionExchange):
-        transactionPool.addTransaction(transactionExchange)
+    exchangeTransaction = exchange.createTransaction(
+        alice.publicKeyString(), 10, 'EXCHANGE')
 
-    coveredTransaction = blockchain.getTransactioncoveredSet(transactionPool.transactions)
-    lastHash = BlockchainUtils.hash(blockchain.blocks[-1].payload()).hexdigest()
+    if not pool.transactionExists(exchangeTransaction):
+        pool.addTransaction(exchangeTransaction)
+
+    coveredTransactions = blockchain.getTransactioncoveredSet(
+        pool.transactions)
+    lastHash = BlockchainUtils.hash(
+        blockchain.blocks[-1].payload()).hexdigest()
     blockCount = blockchain.blocks[-1].blockCount + 1
 
-    blockone = Block(coveredTransaction, lastHash, forger.publicKeyString(), blockCount)
-    blockchain.addBlock(blockone)
+    blockOne = forger.createBlock(coveredTransactions, lastHash, blockCount)
+    blockchain.addBlock(blockOne)
+    pool.removeFromPool(blockOne.transactions)
 
-    transactionAlice = alice.createTransaction(bob.publicKeyString(), 5, "TRANSFER")
-    if not transactionPool.transactionExists(transactionAlice):
-        transactionPool.addTransaction(transactionAlice)
-    coveredTransaction = blockchain.getTransactioncoveredSet(transactionPool.transactions)
-    lastHash = BlockchainUtils.hash(blockchain.blocks[-1].payload()).hexdigest()
+    ''' Alice wants to send 5 Token to Bob '''
+    transaction = alice.createTransaction(bob.publicKeyString(), 5, 'TRANSFER')
+
+    if not pool.transactionExists(transaction):
+        pool.addTransaction(transaction)
+
+    coveredTransactions = blockchain.getTransactioncoveredSet(
+        pool.transactions)
+    lastHash = BlockchainUtils.hash(
+        blockchain.blocks[-1].payload()).hexdigest()
     blockCount = blockchain.blocks[-1].blockCount + 1
+    blockTwo = forger.createBlock(coveredTransactions, lastHash, blockCount)
 
-    blocktwo = Block(coveredTransaction, lastHash, forger.publicKeyString(), blockCount)
-    blockchain.addBlock(blocktwo)
+    blockchain.addBlock(blockTwo)
+    pool.removeFromPool(blockTwo.transactions)
+
 
     pprint.pprint(blockchain.toJson())
-
     

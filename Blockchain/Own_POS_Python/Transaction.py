@@ -7,10 +7,10 @@ from Crypto import Signature
 class Transaction():
     def __init__(self, senderPublicKey, receiverPublicKey, amount, type):
         self.senderPublicKey = senderPublicKey
-        self.reciverPublicKey = receiverPublicKey
+        self.receiverPublicKey = receiverPublicKey
         self.amount = amount
         self.type = type
-        self.id = uuid.uuid1().hex
+        self.id = (uuid.uuid1()).hex
         self.timestamp = time.time()
         self.signature = ''
 
@@ -28,6 +28,6 @@ class Transaction():
 
     def equals(self, transaction):
         if self.id == transaction.id:
-           return True 
+            return True
         else:
             return False

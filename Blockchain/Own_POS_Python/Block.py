@@ -3,30 +3,30 @@ import copy
 
 class Block():
     def __init__(self, transactions, lastHash, forger, blockCount):
+        self.blockCount = blockCount
         self.transactions = transactions
         self.lastHash = lastHash
-        self.forger = forger
-        self.blockCount = blockCount
         self.timestamp = time.time()
-        self.signature = ""
+        self.forger = forger
+        self.signature = ''
 
     @staticmethod
     def genesisBlock():
         genesisBlock = Block([], 'genesisHash', 'genesis', 0)
         genesisBlock.timestamp = 0
-        return genesisBlock 
+        return genesisBlock
 
     def toJson(self):
         data = {}
-        data['lastHash'] = self.lastHash
-        data['forger'] = self.forger
         data['blockCount'] = self.blockCount
-        data['timestamp'] = self.timestamp
+        data['lastHash'] = self.lastHash
         data['signature'] = self.signature
-        jsonTransaction = []
+        data['forger'] = self.forger
+        data['timestamp'] = self.timestamp
+        jsonTransactions = []
         for transaction in self.transactions:
-            jsonTransaction.append(transaction.toJson())
-        data['transactions'] = jsonTransaction
+            jsonTransactions.append(transaction.toJson())
+        data['transactions'] = jsonTransactions
         return data
 
     def payload(self):

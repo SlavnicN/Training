@@ -20,3 +20,4 @@ class AccountModel:
         if publicKeyString not in self.accounts:
             self.addAccount(publicKeyString)
         self.balances[publicKeyString] += amount
+
