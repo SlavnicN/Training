@@ -5,50 +5,15 @@ from Block import Block
 from Blockchain import Blockchain
 from BlockchainUtils import BlockchainUtils
 from AccountModel import AccountModel
+from Node import Node
+import sys
 import pprint
 
 if __name__ == '__main__':
+    ip = sys.argv[1]
+    port = int(sys.argv[2])
+    node = Node(ip, port)
+    node.startP2P()
 
-    blockchain = Blockchain()
-    pool = TransactionPool()
-
-    alice = Wallet()
-    bob = Wallet()
-    exchange = Wallet()
-    forger = Wallet()
-
-    exchangeTransaction = exchange.createTransaction(
-        alice.publicKeyString(), 10, 'EXCHANGE')
-
-    if not pool.transactionExists(exchangeTransaction):
-        pool.addTransaction(exchangeTransaction)
-
-    coveredTransactions = blockchain.getTransactioncoveredSet(
-        pool.transactions)
-    lastHash = BlockchainUtils.hash(
-        blockchain.blocks[-1].payload()).hexdigest()
-    blockCount = blockchain.blocks[-1].blockCount + 1
-
-    blockOne = forger.createBlock(coveredTransactions, lastHash, blockCount)
-    blockchain.addBlock(blockOne)
-    pool.removeFromPool(blockOne.transactions)
-
-    ''' Alice wants to send 5 Token to Bob '''
-    transaction = alice.createTransaction(bob.publicKeyString(), 5, 'TRANSFER')
-
-    if not pool.transactionExists(transaction):
-        pool.addTransaction(transaction)
-
-    coveredTransactions = blockchain.getTransactioncoveredSet(
-        pool.transactions)
-    lastHash = BlockchainUtils.hash(
-        blockchain.blocks[-1].payload()).hexdigest()
-    blockCount = blockchain.blocks[-1].blockCount + 1
-    blockTwo = forger.createBlock(coveredTransactions, lastHash, blockCount)
-
-    blockchain.addBlock(blockTwo)
-    pool.removeFromPool(blockTwo.transactions)
-
-
-    pprint.pprint(blockchain.toJson())
-    
+    if port == 10002:
+        node.p2p.connect_with_node('localhost',10001)
