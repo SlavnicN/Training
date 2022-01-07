@@ -2,6 +2,7 @@ from TransactionPool import TransactionPool
 from Wallet import Wallet
 from Blockchain import Blockchain
 from SocketCommunication import SocketCommunication
+
 class Node():
 
     def __init__(self, ip, port):

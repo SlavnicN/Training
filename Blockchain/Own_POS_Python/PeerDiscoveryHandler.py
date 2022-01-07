@@ -1,5 +1,7 @@
 import threading
 import time
+from Message import Message
+from BlockchainUtils import BlockchainUtils
 
 #frequently communicate with the hole network to discover new node
 class PeerDiscoveryHandler():
@@ -22,3 +24,16 @@ class PeerDiscoveryHandler():
         while True:
             print("discovery")    
             time.sleep(10)
+
+    def handshake(self, connect_node):
+        handshakeMessage = self.handshakeMessage()
+        self.socketCommunication.send(connect_node, handshakeMessage)
+
+    def handshakeMessage(self):
+        ownConnector = self.socketCommunication.socketConnector
+        ownPeers = self.socketCommunication.peers
+        data = ownPeers
+        messageType = 'DISCOVERY'
+        message = Message(ownConnector, messageType, data)
+        encodedMessage = BlockchainUtils.encode(message)
+        return encodedMessage
