@@ -1,4 +1,4 @@
-from ProofOfStack import ProofOfStack
+from ProofOfStake import ProofOfStake
 from Lot import Lot
 import string
 import random
@@ -9,7 +9,7 @@ def getRandomString(length):
     return randomString 
     
 if __name__ == '__main__':
-    pos = ProofOfStack()
+    pos = ProofOfStake()
     pos.update('bob', 10)
     pos.update('alice', 100)
 

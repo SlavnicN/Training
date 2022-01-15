@@ -11,3 +11,4 @@ class Lot():
         for _ in range(self.iteration):
             hashData = BlockchainUtils.hash(hashData).hexdigest()
         return hashData
+
