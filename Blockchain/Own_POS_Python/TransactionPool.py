@@ -25,7 +25,7 @@ class TransactionPool():
         self.transactions = newPoolTransactions
 
     def forgingRequired(self):
-        if len(self.transactions) >= 1:
+        if len(self.transactions) >= 3:
             return True
         else:
             return False
