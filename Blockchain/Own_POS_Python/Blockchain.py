@@ -13,7 +13,7 @@ class Blockchain:
         self.pos = ProofOfStake()
 
     def addBlock(self, block):
-        self.executeAllTransaction(block.transactions)
+        self.executeTransactions(block.transactions)
         self.blocks.append(block)
 
 
@@ -24,6 +24,12 @@ class Blockchain:
             jsonBlocks.append(block.toJson())
         data['blocks'] = jsonBlocks
         return data
+
+    def blockCountValid(self, block):
+        if self.blocks[-1].blockCount == block.blockCount - 1:
+            return True
+        else:
+            return False
 
     def lastBlockCountValid(self, block):
         if self.blocks[-1].blockCount == block.blockCount - 1:
