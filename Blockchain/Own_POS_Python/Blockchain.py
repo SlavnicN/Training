@@ -1,3 +1,5 @@
+from hashlib import new
+from operator import ne
 from Block import Block
 from BlockchainUtils import BlockchainUtils
 from AccountModel import AccountModel
@@ -48,7 +50,7 @@ class Blockchain:
         else:
             return False
 
-    def getTransactioncoveredSet(self, transactions):
+    def getCoveredTransactionSet(self, transactions):
         coveredTransactions = []
         for transaction in transactions:
             if self.transactionCovered(transaction):
@@ -57,7 +59,7 @@ class Blockchain:
                 print('transaction is not covered by sender')
         return coveredTransactions
 
-    def executeAllTransaction(self, transactions):
+    def executeTransactions(self, transactions):
         for transaction in transactions:
             self.executeTransaction(transaction)
 
@@ -77,6 +79,37 @@ class Blockchain:
             self.accountModel.updateBalance(receiver, amount)
 
     def nextForger(self):
-        lastBlockHash = BlockchainUtils.hash(self.blocks[-1].payload()).hexdigest()
+        lastBlockHash = BlockchainUtils.hash(
+            self.blocks[-1].payload()).hexdigest()
         nextForger = self.pos.forger(lastBlockHash)
         return nextForger
+
+    def createBlock(self, transactionsFromPool, forgerWallet):
+        coveredTransactions = self.getCoveredTransactionSet(
+            transactionsFromPool)
+        self.executeTransactions(coveredTransactions)
+        newBlock = forgerWallet.createBlock(
+            coveredTransactions, BlockchainUtils.hash(self.blocks[-1].payload()).hexdigest(), len(self.blocks))
+        self.blocks.append(newBlock)
+        return newBlock
+
+    def transactionExists(self, transaction):
+        for block in self.blocks:
+            for blockTransaction in block.transactions:
+                if transaction.equals(blockTransaction):
+                    return True
+        return False
+
+    def forgerValid(self, block):
+        forgerPublicKey = self.pos.forger(block.lastHash)
+        proposedBlockForger = block.forger
+        if forgerPublicKey == proposedBlockForger:
+            return True
+        else:
+            return False
+
+    def transactionsValid(self, transactions):
+        coveredTransactions = self.getCoveredTransactionSet(transactions)
+        if len(coveredTransactions) == len(transactions):
+            return True
+        return False

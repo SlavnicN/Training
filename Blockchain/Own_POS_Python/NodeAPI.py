@@ -40,10 +40,10 @@ class NodeAPI(FlaskView):
 
     @route('transaction', methods=['POST'])
     def transaction(self):
-        value = request.get_json()
-        if 'transaction' not in value:
+        values = request.get_json()
+        if not 'transaction' in values:
             return 'Missing transaction value', 400
-        transaction = BlockchainUtils.decode(value['transaction'])
+        transaction = BlockchainUtils.decode(values['transaction'])
         node.handleTransaction(transaction)
-        response = {'message': 'Received Transaction'}
+        response = {'message': 'Received transaction'}
         return jsonify(response), 201
