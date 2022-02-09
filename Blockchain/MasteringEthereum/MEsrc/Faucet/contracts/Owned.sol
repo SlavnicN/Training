@@ -9,6 +9,8 @@ contract Owned{
         owner = payable(msg.sender);
     }
 
+    //This will be apply at first on any function it's 
+    // added 
     modifier onlyOwner {
         require(msg.sender == owner);
         _;

@@ -5,6 +5,11 @@ pragma solidity ^0.8.11;
 import "./Mortal.sol";
 
 contract Faucet is Mortal{
+
+    // need this for the contract Token, need to specify payable
+    // if we want to send ether at construction time on Token side
+    constructor() payable {}
+
     //index allow us to make it searchable in the app that will use this event
     event Withdrawal(address indexed to, uint amount);
     event Deposit(address indexed from, uint amount);

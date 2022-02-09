@@ -4,7 +4,9 @@ pragma solidity ^0.8.11;
 import "./Owned.sol";
 
 contract Mortal is Owned {
-    function destroy() public onlyOwner{
+    //need the virtual if you want to be able to overide it
+    //in child contract
+    function destroy() virtual public onlyOwner{
         selfdestruct(owner);
     }
 }

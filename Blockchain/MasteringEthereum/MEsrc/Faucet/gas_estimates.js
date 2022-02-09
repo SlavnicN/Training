@@ -1,0 +1,26 @@
+
+
+var FaucetContract = artifacts.require("./migrations/Faucet.sol");
+
+module.exports = function(callback){
+    FaucetContract.web3.eth.getGasPrice(function(error, result){
+        var gasPrice = Number(result);
+        console.log("Gas Price is "+ gasPrice + " wei");
+
+        //Get the contract instance
+        FaucetContract.deployed().then(function(FaucetContractInstance){
+            //Use the keyword 'estimateGas' after the function name to get the gas
+            //estimation for this particular function (aprove)
+            FaucetContractInstance.send(web3.utils.toWei('1', "ether"));
+            return FaucetContractInstance.withdraw.estimateGas(web3.utils.toWei('0.1', "ether"));
+        }).then(function(result){
+            var gas = Number(result);
+
+            console.log("gas estimation = " + gas + " units");
+            console.log("gas cost estimation = "+ (gas * gasPrice) + " wei");
+            console.log("gas cost estimation = " + web3.utils.fromWei((gas * gasPrice).toString(), 'ether') + " ether");
+
+        });
+    });
+
+}
