@@ -1,0 +1,1 @@
+/home/nslavnic/Documents/MeinGitHub/Training/AOC/2022/challenge1/target/debug/challenge1: /home/nslavnic/Documents/MeinGitHub/Training/AOC/2022/challenge1/src/input.txt /home/nslavnic/Documents/MeinGitHub/Training/AOC/2022/challenge1/src/main.rs
