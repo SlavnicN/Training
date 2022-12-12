@@ -10,3 +10,9 @@ contract Mortal is Owned {
         selfdestruct(owner);
     }
 }
+
+contract Test {
+    //need the virtual if you want to be able to overide it
+    //in child contract
+
+}
