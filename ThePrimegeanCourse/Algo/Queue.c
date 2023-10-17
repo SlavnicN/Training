@@ -15,60 +15,103 @@ struct Queue{
     int len;
 };
 
-void printQueue(Node* head, int n){
-    for (int i = 0; i<n; i++) {
-        printf("Node[%d] = %d ",i, head->next->value);
-        head = head->next;
+Node* newNode(int value){
+    Node *node = malloc(sizeof(Node*));
+
+    if (!node) {
+        printf("Heap Overflow\n");
+        exit(EXIT_FAILURE);
+    }
+    node->value = value;
+    node->next = NULL;
+
+    return node;
+}
+
+Queue* initQueue(){
+    Queue *my_queue = malloc(sizeof(Queue*));
+
+    if (!my_queue) {
+        printf("Heap Overflow\n");
+        exit(EXIT_FAILURE);
+    }
+
+    my_queue->head = NULL;
+    my_queue->tail = NULL;
+    my_queue->len=0;
+
+    return my_queue;
+}
+
+void printQueue(Queue* queue){
+    Node* current = queue->head;
+    for (int i = 0; i< queue->len; i++) {
+        printf("Node[%d] = %d ",i, current->value);
+        current = current->next;
     }
     printf("\n");
 }
 
-void push(Node* A, Node* tail){
-    tail->next->next = A;
-    tail->next = A;
+void peek(Queue* queue){
+    if(queue->tail != NULL){
+        printf("Node = %d ",queue->tail->value);
+    }
 }
 
-int pop(Node* head){
-    Node* tmp = head->next;
-    head->next = tmp->next;
+void push(Queue* queue, int value){
+    Node *node = newNode(value);
+
+    if(queue->len == 0){
+        queue->head = node;
+        queue->tail = node;
+    }else{
+        queue->tail->next = node;
+        queue->tail = node;
+    }
+    queue->len++;
+}
+
+int pop(Queue* queue){
+    if(queue->head == NULL){
+        return -1;
+    }
+
+    Node* tmp = queue->head;
+
+    queue->len--;
+    queue->head = tmp;
     tmp->next = NULL;
 
-    return tmp->value;
+    int data = tmp->value;
+    free(tmp);
+    return data;
+}
+
+bool isEmpty(Queue* queue){
+    return queue->head == NULL;
 }
 
 int main(){
-    
-    Node head;
-    Node tail;
-    Queue my_queue;
+    //This is allocated on the stack, they will be gone when out the
+    //function main()
+    //malloc() will allocated them on the heap, making them persistante outside
+    //of the main()malloc, but need to free them manually
+    //Another probleme is size limit, the stack is smaller than the heap
+    //so if there is a lot of recursive call on the stack it might break 
+    //
+    //TODO rewrite this to use malloc instead 
+    //
+    Queue *my_queue = initQueue();
 
-    my_queue.head = &head;
-    my_queue.tail = &tail;
+    push(my_queue, 1);
+    push(my_queue, 2);
+    printQueue(my_queue);
+    pop(my_queue);
+    printQueue(my_queue);
+    peek(my_queue);
 
-    Node A;
-    Node B;
-    Node C;
-    Node D;
-    Node F;
-    head.next = &A;
-    tail.next = &B;
+    free(my_queue);
 
-    A.value = 1;
-    A.next = &B;
-    B.value = 2;
-    C.value = 3;
-    D.value = 4;
-    F.value = 5;
-
-    push(&C, &tail);
-    push(&D, &tail);
-    push(&F, &tail);
-
-    pop(&head);
-
-    printf("new tail: %d", tail.next->value);
-    printQueue(&head, 5);
-    
     return EXIT_SUCCESS; 
 }
 
