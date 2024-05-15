@@ -16,12 +16,15 @@ struct Queue{
 };
 
 Node* newNode(int value){
-    Node *node = malloc(sizeof(Node*));
+
+    //TODO Understand why this worked on Linux and not on mac 
+    Node *node = malloc(sizeof(Node));
 
     if (!node) {
         printf("Heap Overflow\n");
         exit(EXIT_FAILURE);
     }
+
     node->value = value;
     node->next = NULL;
 
@@ -29,7 +32,7 @@ Node* newNode(int value){
 }
 
 Queue* initQueue(){
-    Queue *my_queue = malloc(sizeof(Queue*));
+    Queue *my_queue = malloc(sizeof(Queue));
 
     if (!my_queue) {
         printf("Heap Overflow\n");
@@ -77,12 +80,10 @@ int pop(Queue* queue){
     }
 
     Node* tmp = queue->head;
-
-    queue->len--;
-    queue->head = tmp;
-    tmp->next = NULL;
-
     int data = tmp->value;
+    queue->len--;
+    queue->head = tmp->next;
+
     free(tmp);
     return data;
 }
@@ -99,7 +100,6 @@ int main(){
     //Another probleme is size limit, the stack is smaller than the heap
     //so if there is a lot of recursive call on the stack it might break 
     //
-    //TODO rewrite this to use malloc instead 
     //
     Queue *my_queue = initQueue();
 
