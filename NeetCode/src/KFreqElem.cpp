@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <iostream>
@@ -31,6 +32,19 @@ using namespace std;
 void printVector(vector<int> my_vec) {
   for (int n : my_vec)
     cout << n << ' ';
+  cout << '\n';
+}
+
+void print_vector_of_vector(vector<vector<int>> my_vec_vec) {
+  cout << '[';
+  for (vector<int> my_vec : my_vec_vec) {
+    cout << '[';
+    for (int n : my_vec) {
+      cout << n << " ,";
+    }
+    cout << ']';
+  }
+  cout << '[';
   cout << '\n';
 }
 
@@ -71,6 +85,78 @@ int search_min_key(map<int, int> my_map) {
   }
 
   return min_key;
+}
+
+int search_vector(int num, vector<int> &my_vec) {
+
+  for (int i = 0; i < my_vec.size(); i++) {
+    if (num == my_vec[i]) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+void add_in_place(int current_num, vector<vector<int>> &my_v_v) {
+  int i;
+  int my_v_v_size = my_v_v.size();
+
+  for (i = 0; i < my_v_v_size; i++) {
+    if (search_vector(current_num, my_v_v[i]) == -1) {
+      my_v_v[i].push_back(current_num);
+      break;
+    }
+  }
+}
+
+// third try !
+// input [1, 1, 1, 2, 2, 3], k = 2
+// i = 0, [1], | v_v_o = [[]]
+//    check if in v_v_o[0]
+//        yes:
+//        no: insert [1] in v_v_o[0]=[1] continue | [[1]]
+// i = 1, [1], | v_v_o = [[1]]
+//    check if in v_v_[0]
+//        yes: check if in v_v_o[1]
+//            yes:
+//            no: insert [1] in v_v_o[1]=[1] continue | [[1], [1]]
+//        no:
+// i = 2, [1], | [[1], [1]]
+//    check if in v_v_o[0]
+//        yes: check if in v_v_o[1]
+//            yes: check if in v_v_o[2]
+//                yes:
+//                no: insert [1] in v_v_o[2]=[1] continue | [[1], [1], [1]]
+//        no:
+// i = 3, [2], | [[1], [1], [1]]
+//    check if in v_v_o[0]
+//        yes:
+//        no: insert [2] in v_v_o[0] = [1,2] | [[1,2], [1], [1]]
+// i = 4, [2] | [[1,2], [1], [1]]
+//    check if in v_v_o[0]
+//        yes: check if in v_v_o[1]
+//            yes:
+//            no: insert [2] in v_v_o[1] = [1,2]
+//   vector<vector<int>> v_v_occurence;
+
+vector<int> topKFreq(vector<int> &nums, int k) {
+  int i;
+  int nums_size = nums.size();
+  vector<int> res;
+  vector<vector<int>> v_v_occurence;
+
+  for(i=0;i<nums_size;i++){
+      vector<int> tmp;
+      v_v_occurence.push_back(tmp);
+  }
+
+  for (i = 0; i < nums_size; i++) {
+    add_in_place(nums[i], v_v_occurence);
+  }
+
+  print_vector_of_vector(v_v_occurence);
+  // todo boucle i<k?
+  return res;
 }
 
 vector<int> topKFrequent(vector<int> &nums, int k) {
@@ -150,7 +236,7 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
   //        yes:
   //        no: continue
   for (const auto [key, value] : counter) {
-      
+
     cout << "{" << key << ":" << value << "}" << endl;
     if (res.size() == 0) {
       res.push_back(key);
@@ -160,9 +246,9 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
       int min_key = search_min_key(counter);
       cout << "the min key: " << min_key << endl;
       // search res[x]=minKey
-      int index_min = search_index_min(res);
+      // int index_min = search_index_min(res);
       // replace res[x] = current count.key
-      res[index_min] = key;
+      // res[index_min] = key;
     }
     cout << "res = ";
     printVector(res);
@@ -190,20 +276,13 @@ vector<int> topKFrequent(vector<int> &nums, int k) {
   // i = 5, [3] | {1:[1,2], 2:[1,2], 3:[1]}
   //    insert | {1:[1,2,3], 2:[1,2], 3:[1]}
 
-  for(i = 0;i<nums_size;i++){
-
-  }
-
-  //todo boucle i<k?
-
-
   return res;
 }
 
 int main() {
   vector<int> input = {1, 1, 1, 2, 2, 3};
 
-  vector<int> res = topKFrequent(input, 2);
+  vector<int> res = topKFreq(input, 2);
   printVector(res);
   return 0;
 }
