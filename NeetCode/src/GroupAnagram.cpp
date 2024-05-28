@@ -233,7 +233,7 @@ map<string, vector<string>> sort_words_vector(vector<string> vec) {
 //         yes: return tan
 //         no:
 
-vector<vector<string>> groupAnagramsv2(vector<string> &strs) { //O(n2logn)
+vector<vector<string>> groupAnagramsv2(vector<string> &strs) { // O(n2logn)
   map<string, vector<string>> map_sorted_words;
   vector<vector<string>> res;
 
@@ -246,9 +246,9 @@ vector<vector<string>> groupAnagramsv2(vector<string> &strs) { //O(n2logn)
   }
   // map_sorted_words = sort_words_vector(strs);
 
-  for (i = 0; i < strs_size; i++) {//O(n)
+  for (i = 0; i < strs_size; i++) { // O(n)
     string sorted_word = strs[i];
-    sort(sorted_word.begin(), sorted_word.end());//O(nlogn)
+    sort(sorted_word.begin(), sorted_word.end()); // O(nlogn)
 
     map_sorted_words[sorted_word].push_back(strs[i]);
 

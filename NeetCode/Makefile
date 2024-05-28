@@ -2,7 +2,8 @@
 CXX = g++
 
 # Flags
-CXXFLAGS = -std=c++20 -Wall -Werror -O3
+CXXFLAGS = -std=c++20 
+#-Wall -Werror -O3
 
 # Directories
 SRC_DIR = src

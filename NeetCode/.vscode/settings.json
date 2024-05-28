@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "string_view": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp"
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/nslavnic/Documents/Perso/Training/master/NeetCode/bin",
+            "binaryPath": "/home/nslavnic/Documents/Perso/Training/master/NeetCode/bin/KFreqElem",
+            "binaryArgs": []
+        }
+    ]
+}
